@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:url_launcher/url_launcher.dart';
 class DashboardPage extends StatefulWidget {
   final String userId;  // Accept userId as a parameter
 
@@ -13,12 +14,15 @@ class _DashboardPageState extends State<DashboardPage> {
   final FirebaseFirestore _firestore = FirebaseFirestore.instance;
   List<Map<String, dynamic>> services = [];
   List<Map<String, dynamic>> products = [];
+  final uri = Uri.base;
+    var pathSegments="";
 
   @override
   void initState() {
     super.initState();
     _fetchServices();
     _fetchProducts();
+    pathSegments=uri.pathSegments as String;
   }
 
   // Fetch services specific to the userId
@@ -215,9 +219,11 @@ class _DashboardPageState extends State<DashboardPage> {
       },
     );
   }
+  
 
   @override
   Widget build(BuildContext context) {
+     
     return Scaffold(
       appBar: AppBar(title: const Text('Dashboard'), backgroundColor: Colors.deepPurple),
       body: Padding(
@@ -228,6 +234,7 @@ class _DashboardPageState extends State<DashboardPage> {
             _buildServicesList(),
             const SizedBox(height: 16),
             _buildProductsGrid(),
+            _buildFooter(context,pathSegments.toString(),widget.userId,),
           ],
         ),
       ),
@@ -238,6 +245,22 @@ class _DashboardPageState extends State<DashboardPage> {
       ),
     );
   }
+  // 🔹 Footer Section
+Widget _buildFooter(BuildContext context, String url, String userid) {
+  return Container(
+    width: double.infinity,
+    padding: const EdgeInsets.all(20),
+    color: Colors.deepPurple,
+    child: Column(
+      children: [
+        _buildFooterItem(Icons.public, "Publick link","📧 $url/$userid",),
+        
+      ],
+    ),
+  );
+}
+
+
 
   Widget _buildServicesList() {
     return SizedBox(
@@ -390,4 +413,34 @@ class _DashboardPageState extends State<DashboardPage> {
       ),
     );
   }
+   Widget _buildFooterItem(IconData icon, String text, String url) {
+    double screenWidth = MediaQuery.of(context).size.width;
+    double fontSize = screenWidth < 600 ? 12 : 16;
+
+    // Function to launch URLs
+    Future<void> _launchURL(String url) async {
+      if (await canLaunch(url)) {
+        await launch(url);
+      } else {
+        throw 'Could not launch $url';
+      }
+    }
+
+    return Padding(
+      padding: const EdgeInsets.symmetric(vertical: 6),
+      child: GestureDetector(
+        onTap: () => _launchURL(url),
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Icon(icon, color: Colors.white70, size: fontSize + 4),
+            const SizedBox(width: 8),
+            Text(text, style: TextStyle(color: Colors.white, fontSize: fontSize)),
+          ],
+        ),
+      ),
+    );
+  }
+
 }
+

@@ -31,8 +31,67 @@
 
   <title>Dess Protifolio</title>
   <link rel="manifest" href="manifest.json">
+  
+  <style>
+    /* Center the loader */
+    #loading-message {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      background: #ffffff;
+      font-family: Arial, sans-serif;
+    }
+
+    /* Circular rotating loader */
+    .loader {
+      width: 50px;
+      height: 50px;
+      border: 5px solid rgba(0, 0, 0, 0.1);
+      border-radius: 50%;
+      border-top: 5px solid #007bff; /* Blue spinner */
+      animation: spin 1s linear infinite;
+      margin-bottom: 10px;
+    }
+
+    @keyframes spin {
+      0% { transform: rotate(0deg); }
+      100% { transform: rotate(360deg); }
+    }
+
+    /* Loading text with animated dots */
+    .loading-text {
+      font-size: 18px;
+      font-weight: bold;
+      color: #333;
+    }
+
+    /* Dots animation */
+    .dots span {
+      animation: blink 1.5s infinite;
+    }
+
+    .dots span:nth-child(1) { animation-delay: 0s; }
+    .dots span:nth-child(2) { animation-delay: 0.3s; }
+    .dots span:nth-child(3) { animation-delay: 0.6s; }
+
+    @keyframes blink {
+      0%, 100% { opacity: 0; }
+      50% { opacity: 1; }
+    }
+  </style>
 </head>
 <body>
+    <!-- Loader Container -->
+  <div id="loading-message">
+    <div class="loader"></div>
+    <div class="loading-text">Loading<span class="dots"><span>.</span><span>.</span><span>.</span></span></div>
+  </div>
   <script src="flutter_bootstrap.js" async></script>
   <script type="module">
     // Import the functions you need from the SDKs you need

@@ -123,45 +123,53 @@ class _ProductServiceShowPageState extends State<ProductServiceShowPage> {
     );
   }
 
-  // GridView for Products
-  Widget _buildProductGrid() {
-    return GridView.builder(
-      shrinkWrap: true,  // Prevents GridView from taking full height
-      physics: NeverScrollableScrollPhysics(),  // Prevent scrolling
-      gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-        crossAxisCount: 2,  // Number of columns in grid
-        crossAxisSpacing: 10,
-        mainAxisSpacing: 10,
-        childAspectRatio: 0.75,  // Adjust product card size
-      ),
-      itemCount: filteredProducts.length,
-      itemBuilder: (context, index) {
-        final product = filteredProducts[index];
-        return Card(
-          elevation: 5,
-          shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(12),
-          ),
-          child: Column(
-            children: [
-              Image.network(product['image'], fit: BoxFit.cover),  // Add image URL
-              Padding(
-                padding: const EdgeInsets.all(8.0),
-                child: Text(
-                  product['name'],
-                  style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
-                ),
+ // GridView for Products
+Widget _buildProductGrid() {
+  return GridView.builder(
+    shrinkWrap: true,  // Prevents GridView from taking full height
+    physics: NeverScrollableScrollPhysics(),  // Prevent scrolling
+    gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+      crossAxisCount: 2,  // Number of columns in grid
+      crossAxisSpacing: 10,
+      mainAxisSpacing: 10,
+      childAspectRatio: 0.75,  // Adjust product card size
+    ),
+    itemCount: filteredProducts.length,
+    itemBuilder: (context, index) {
+      final product = filteredProducts[index];
+      return Card(
+        elevation: 5,
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(12),
+        ),
+        child: Column(
+          children: [
+            // Use Expanded widget to make the image take the full height and width of the card
+            Expanded(
+              child: Image.network(
+                product['image'],
+                fit: BoxFit.cover,
+                width: double.infinity, // Ensures the image covers the width of the card
               ),
-              Padding(
-                padding: const EdgeInsets.all(8.0),
-                child: Text('\$${product['price']}'),
+            ),
+            Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: Text(
+                product['name'],
+                style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
               ),
-            ],
-          ),
-        );
-      },
-    );
-  }
+            ),
+            Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: Text('\$${product['price']}'),
+            ),
+          ],
+        ),
+      );
+    },
+  );
+}
+
 
   // Horizontal ListView for Services
   Widget _buildServiceList() {
